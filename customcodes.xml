@@ -1,0 +1,750 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CustomCode>
+  <folder menu="00 - Etc" id="2019031212283811">
+    <code menu="Standard Documentation" id="c2019031212292522">'@Folder("")
+Option Explicit
+
+' ----------------------------------------------------------------
+' Procedure Name:
+' Purpose:
+' Procedure Kind:
+' Procedure Access:
+' Return Type:
+' Author:
+' Date:
+' ----------------------------------------------------------------</code>
+    <code menu="Send Outlook Email" id="c2019031212301413">Sub SendEmailFromOutlook(body As String, subject As String, toEmails As String, ccEmails As String, bccEmails As String)
+    Dim outApp As Object
+    Dim outMail As Object
+    Set outApp = CreateObject("Outlook.Application")
+    Set outMail = outApp.CreateItem(0)
+ 
+    With outMail
+        .to = toEmails
+        .CC = ccEmails
+        .BCC = bccEmails
+        .subject = subject
+        .HTMLBody = body
+        .Send 'Send the email
+    End With
+ 
+    Set outMail = Nothing
+    Set outApp = Nothing
+End Sub
+
+
+Sub SomeMacro()
+
+'insert macro to run here
+
+'(body, subject, to, CC, Bcc)
+    Call SendEmailFromOutlook("", "", "", "", "")
+End Sub</code>
+    <code menu="Generate PDF of WS" id="c2019031212311204">Sheets("").Range("").Select
+    Selection.ExportAsFixedFormat Type:=xlTypePDF, Filename:= _
+    "C:\Windows\Desktop" + "\" + ActiveSheet.Name + ".pdf", Quality:=xlQualityStandard, _
+    IncludeDocProperties:=True, IgnorePrintAreas:=False, OpenAfterPublish:=False</code>
+    <code menu="Activity Log (Open - Close)" id="c2019031212362245">'have it auto assign live values upon workbook open and using environ to grab user name
+' you can make a log that tracks accessing of a file
+Private Sub Workbook_Open()
+	Dim activityLog As Worksheet
+		Set activityLog = ThisWorkbook.sheets("Activity Log")
+	Dim logLastRow As Long
+Application.ScreenUpdating = False
+activityLog.Visible = True
+    logLastRow = activityLog.Cells(Rows.Count, 1).End(xlUp).Row + 1
+        activityLog.Cells(logLastRow, 1) = Date
+        activityLog.Cells(logLastRow, 2) = Time
+        activityLog.Cells(logLastRow, 3) = Environ("UserName")
+        activityLog.Cells(logLastRow, 4) = "Open"
+            Application.DisplayAlerts = False
+                ThisWorkbook.Save
+            Application.DisplayAlerts = True
+activityLog.Visible = False
+Application.ScreenUpdating = True
+End Sub
+
+Private Sub Workbook_BeforeClose(Cancel As Boolean)
+	Dim activityLog As Worksheet
+		Set activityLog = ThisWorkbook.sheets("Activity Log")
+	Dim logLastRow As Long
+Application.ScreenUpdating = False
+activityLog.Visible = True
+    logLastRow = activityLog.Cells(Rows.Count, 1).End(xlUp).Row + 1
+        activityLog.Cells(logLastRow, 1) = Date
+        activityLog.Cells(logLastRow, 2) = Time
+        activityLog.Cells(logLastRow, 3) = Environ("UserName")
+        activityLog.Cells(logLastRow, 4) = "Close"
+            Application.DisplayAlerts = False
+                ThisWorkbook.Save
+            Application.DisplayAlerts = True
+activityLog.Visible = False
+Application.ScreenUpdating = True
+End Sub</code>
+    <code menu="Get Environ and Path" id="c2019031308482655">Dim WshShell As Object
+Dim SpecialPath As String
+
+Set WshShell = CreateObject("WScript.Shell")
+SpecialPath = WshShell.SpecialFolders("Desktop")</code>
+    <code menu="Concatenating Double Quotes" id="c2019031815230521">" &amp; Chr(34) &amp; "</code>
+    <code menu="VBCRLF" id="c2019033022574861">" &amp; vbcrlf &amp; vbcrlf &amp; "</code>
+  </folder>
+  <folder menu="01 - Application" id="2019031215545131">
+    <code menu="Delay Application Run Time" id="c2019031215545622">Application.Wait (Now + TimeValue("0:00:05")) </code>
+    <code menu="File - Folder Picker" id="c2019031308481774">Dim WshShell As Object
+Dim SpecialPath As String
+
+Set WshShell = CreateObject("WScript.Shell")
+SpecialPath = WshShell.SpecialFolders("Desktop")
+</code>
+    <folder menu="FSO" id="2019031308584313">
+      <code menu="FSO Info" id="c2019031308590235">'CREATING THE INSTANCE OF THE FILE SYSTEM OBJECT
+
+
+Dim fso
+Set fso = CreateObject("Scripting.FileSystemObject")
+
+
+'3 GET METHODS OF THE FSO:
+'GetDrive
+'GetFolder
+	'GetParentFolderName 'Determine the name of a folder's parent folder.
+	'GetSpecialFolder 'Determine the path of system folders.
+'GetFile
+
+
+'OTHER FSO METHODS
+'CreateFolder
+
+'File.Move or FileSystemObject.MoveFile
+'File.Copy or FileSystemObject.CopyFile
+'File.Delete or FileSystemObject.DeleteFile
+
+'FolderExists
+'DateLastModified
+
+
+
+Dim fso, f1
+Set fso = CreateObject("Scripting.FileSystemObject")
+Set f1 = fso.GetFile("c:\test.txt")
+
+
+'syntax to create a folder and get a response about it
+
+
+Sub CreateFolder
+   Dim fso, fldr
+   Set fso = CreateObject("Scripting.FileSystemObject")
+   Set fldr = fso.CreateFolder("C:\MyTest")
+   msgbox "Created folder: " &amp; fldr.Name
+End Sub
+
+
+'WRITING TEXT TO A TEXT FILE
+
+	'Write
+	'WriteLine
+	'WriteBlankLines
+	'Read
+	'SkipLine
+	'ReadLine
+	'ReadAll
+
+	'OpenAsTextFile
+	'OpenAsTextStream
+	'AtEndOfStream
+
+Dim fso, f1, ts
+Const ForWriting = 2
+Set fso = CreateObject("Scripting.FileSystemObject")
+fso.CreateTextFile ("c:\test1.txt")
+Set f1 = fso.GetFile("c:\test1.txt")
+Set ts = f1.OpenAsTextStream(ForWriting, True)
+
+
+dim FSO as scripting.filesystem object 'definition of rreferenced library set fso = new scripting.filesystemobject ' start a new instance of the file system object
+
+end of sub routines its better practice to release your variables by setting them equal to nothing
+
+dim variable as string set it = to path of folder destination
+
+dim fil as scripting.file
+    set fil = fso.getfile('file path here)
+        'then check properties with intellisense
+            fil.'property here
+
+
+to get the beginning portion of the file PATH use environ("userprofile"), username just gives the name but profile give the first half of the file path
+</code>
+      <code menu="FSO Writing Text Files" id="c2019031308593376">
+Sub creatinganewtextfile()
+    Dim FSO As Scripting.FileSystemObject
+    Dim ts As Scripting.TextStream
+        Set FSO = New Scripting.FileSystemObject
+        Set ts = FSO.CreateTextFile(Environ("userprofile") &amp; "\desktop\" &amp; "activity log.txt")
+
+    ts.Write "created on " &amp; Now &amp; vbNewLine
+    ts.WriteLine "Created by " &amp; Environ("username")
+    ts.WriteBlankLines 2
+    ts.Write "Data starts here" &amp; vbNewLine
+
+    ts.Close
+    Set FSO = Nothing
+    Call adddatatotextfile
+End Sub
+
+Sub adddatatotextfile()
+    Dim FSO As Scripting.FileSystemObject
+    Dim ts As Scripting.TextStream
+    Dim r As Range
+    Dim colcount As Integer
+    Dim i As Integer
+        Set FSO = New Scripting.FileSystemObject
+        Set ts = FSO.OpenTextFile(Environ("userprofile") &amp; "\desktop\" &amp; "activity log.txt", ForAppending)
+        
+        Sheets("vba playground").Activate
+        
+        colcount = Range("a1", Range("a1").End(xlToRight)).Cells.Count
+        
+        For Each r In Range("A2", Range("a1").End(xlDown))
+        
+            For i = 1 To colcount
+                
+                ts.Write r.Offset(0, i - 1).Value
+                If i &lt; colcount Then ts.Write vbTab
+                
+            Next i
+            
+            ts.WriteLine
+            
+        Next r
+        
+        ts.Close
+        Set FSO = Nothing
+        
+
+End Sub
+
+
+
+==========================================
+write values from texst file to excel
+==========================================
+
+Sub readfromtextfile()
+    Dim FSO As Scripting.FileSystemObject
+    Dim ts As Scripting.TextStream
+    Dim textline As String
+    Dim tabposition As Integer
+        Set FSO = New Scripting.FileSystemObject
+        Set ts = FSO.OpenTextFile(Environ("userprofile") &amp; "\desktop\" &amp; "activity log.txt")
+Application.ScreenUpdating = False
+        Workbooks.Add
+        
+        Do Until ts.AtEndOfStream
+            textline = ts.ReadLine
+            tabposition = InStr(textline, vbTab)
+            Do Until tabposition = 0
+                activecell.Value = Left(textline, tabposition - 1)
+                activecell.Offset(0, 1).Select
+                textline = Right(textline, Len(textline) - tabposition)
+                tabposition = InStr(textline, vbTab)
+            Loop
+            activecell.Value = textline
+            activecell.Offset(1, 0).End(xlToLeft).Select
+        Loop
+
+        ts.Close
+        Set FSO = Nothing
+Application.ScreenUpdating = True
+End Sub
+
+
+
+==========================================
+
+Dim strFileName As String, myFile As Integer, strText As String
+
+Close #myFile
+==========================================
+strFileName = "C:\test.txt"
+myFile = FreeFile 'Get first free file number
+==========================================
+'Open Text file for Input to extract information
+Open strFileName For Input As #myFile
+
+strFileName = "C:\test.txt"
+myFile = FreeFile 'Get first free file number
+==========================================
+'Open Text file for Output to Write to the File
+Open strFileName For Output As #myFile
+
+strText = Input$(LOF(myFile), myFile)</code>
+    </folder>
+    <code menu="Application - Undo" id="c2019040415434351">With Application
+    .EnableEvents = False
+    .undo
+    .EnableEvents = True
+End With
+</code>
+  </folder>
+  <folder menu="02 - Formatting" id="2019031216044753">
+    <code menu="Remove All Conditional Formatting Rules" id="c2019031216045624">Cells.FormatConditions.Delete</code>
+    <code menu="Date Values" id="c2019031216071855">' Wrapping date using forward slashes with hashes displays date correctly
+' #7/4/2018#</code>
+    <code menu="CCHCS Dashboard Color Enum" id="c2019031307250081">'@Folder("DashboardColorEnum")
+Option Explicit
+
+Public Enum dbColor
+    dbGreen = 25600
+    dbYellow = 9234160
+    dbRed = 139
+End Enum</code>
+    <code menu="Implement Custom Number Formats" id="c2019031308500458">'make selection currency format not accounting format
+Selection.NumberFormat = "$#,##0.00_);[Red]($#,##0.00)"</code>
+    <code menu="Font Double Underline Toggle" id="c2019031308505069">'make font double Underlined
+Selection.Font.Underline = xlUnderlineStyleDouble
+
+'make font NOT-double Underlined
+Selection.Font.Underline = xlUnderlineStyleNone</code>
+    <code menu="Comprehensive Font Editing" id="c2019031308545491">With Selection.Font
+    .Bold = True
+    .Italic = False
+    .Strikethrough = False
+    .Underline = False
+    .Name = "Calibri Light"
+    .Size = 14
+    .Color = -16776961
+    .HorizontalAlignment = xlCenter
+    .VerticalAlignment = xlCenter
+    .Orientation = 45
+End With</code>
+    <code menu="Paste Special Options" id="c2019031309081743">xlPasteAll
+xlpasteallexceptborders
+xlpasteallmergingconditionalformats
+xlpasteallusingsourcetheme
+xlpastecolumnwidths
+xlpastecomments
+xlpasteformats
+xlpasteformulasandnumberformats
+xlpastespecialoperation
+xlpastespecialoperationadd
+xlpastespecialoperationdivid
+xlpastespecialoperationmultiple
+xlpastespecialoperationnone
+xlpastespecialoperationsubtract
+xlpastetype
+xlpastevalidation
+xlpastevalues
+xlpastevaluesandnumberformats</code>
+    <code menu="Border Style Options" id="c2019031309091264">Possible Weights:
+•xlThin
+•xlThick
+
+Possible LineStyles:
+•xlContinuous
+•xlDash
+•xlDashDot
+•xlDashDotDot
+•xlDot
+•xlDouble
+•xlSlantDashDot
+•xlLineStyleNone
+
+Possible borders (Index):
+•xlDiagonalDown
+•xlDiagonalUp
+•xlEdgeBottom
+•xlEdgeLeft
+•xlEdgeRight
+•xlEdgeTop
+•xlInsideHorizontal
+•xlInsideVertical
+</code>
+    <code menu="Numbers Stored As Text To Numbers" id="c2019031309093775">'number conversion code from text to number
+    With Selection
+        Selection.NumberFormat = "General"
+        .Value = .Value
+    End With</code>
+  </folder>
+  <folder menu="03 - Workbook - Worksheet" id="2019031307325042">
+    <code menu="Active WB-WS" id="c2019031307345933">Dim AWb as Workbook
+    Set AWb = ThisWorkbook
+Dim AWs as Worksheet
+    Set AWs = AWb.ActiveSheet
+
+
+</code>
+    <code menu="Hide All Worksheet Tabs" id="c20190313093200215">ActiveWindow.DisplayWorkbookTabs = False</code>
+    <code menu="Autofit On Worksheet Calculate" id="c20190313093255416">'calculate event that runs every time the sheet calculates
+
+Private Sub Worksheet_Calculate()
+	Columns("A:F").AutoFit
+End Sub</code>
+    <code menu="Change WS Tab Color" id="c20190313093344217">Worksheets("Sheet1").Tab.ColorIndex = 7</code>
+    <code menu="Create Hyperlink Index Of All WS In WB" id="c20190313095828818">Sub ListSheets()
+    Dim ws As Worksheet
+    Dim x As Integer
+    
+    x = 1
+    
+    ActiveSheet.Range("A:A").Clear
+    
+    For Each ws In Worksheets
+        
+        ActiveSheet.Cells(x, 1).Select
+        
+        ActiveSheet.Hyperlinks.Add Anchor:=Selection, Address:=vbNullString, SubAddress:=ws.Name &amp; "!A1", TextToDisplay:=ws.Name
+        
+        x = x + 1
+        
+    Next ws
+    
+End Sub</code>
+    <code menu="Very Hidden WS" id="c2019031808591002">Sheets("Example Report").Visible = xlVeryHidden
+Sheets("Example Report").Visible = True</code>
+    <code menu="Add Named WS" id="c2019031810581453">Worksheets.Add(AFTER:=Sheets(Sheets.Count)).Name = ""</code>
+  </folder>
+  <folder menu="04 - Files - Dialog Boxes" id="2019031308463411">
+    <code menu="File - Folder Picker" id="c2019031308465862">Sub FilePicker()
+Dim fd As FileDialog
+Dim filewaschosen As Boolean
+    Set fd = Application.FileDialog(msoFileDialogOpen)
+
+'set your own filters for file types you want shown
+    fd.Filters.Clear
+        fd.Filters.Add "old excel files", "*.xls"
+        fd.Filters.Add "New excel files", "*.xlsx"
+        fd.Filters.Add "Macro excel files", "*.xlsm"
+        fd.Filters.Add "ALL excel files", "*.xl*"
+    fd.FilterIndex = 4
+
+
+'doesnt allow multip file selections in the dialog box
+    fd.AllowMultiSelect = False
+
+'initial filename where the dialog box opens up upon
+    fd.InitialFileName = Environ("userprofile") &amp; "\desktop"
+
+'changes the title of the dialog box header
+    fd.Title = "open sesame!"
+'updates to this setting upon selecting a file to open
+    fd.ButtonName = "GO!"
+
+'file: picker will return the path for the file
+'folder: picker will return the path for the folder
+'open: open a file
+'saveas: a file
+
+filewaschosen = fd.Show
+'open = 1 close = 0
+If Not filewaschosen Then
+    MsgBox "you didnt select a file"
+        Exit Sub
+End If
+
+fd.Execute 'executes the default action
+End Sub
+</code>
+  </folder>
+  <folder menu="05 - Tables and Pivot Tables" id="2019031308485856">
+    <code menu="Filter a Table" id="c2019031308492947">Dim ws As Worksheet
+    Set ws = ActiveSheet
+Dim tbl As ListObject
+	'you input the name of the table
+    Set tbl = ws.ListObjects("categories")
+Dim sortcolumn As Range
+    'name of the table and then column header in the brackets
+    Set sortcolumn = Range("categories[Count]")
+        With tbl.Sort
+           .SortFields.Clear
+           .SortFields.Add _
+                Key:=sortcolumn, _
+                SortOn:=xlSortOnValues, _
+                Order:=xlAscending
+           .Header = xlYes
+           .Apply
+        End With</code>
+    <code menu="Clear All Pivot Table Slicers" id="c2019031309012397">'CLEAR ALL THE SLICERS AND TIMELINES FOR THE PIVOT TABLE
+'Pivot Table Name in the Tables Argument
+ActiveSheet.PivotTables("").ClearAllFilters</code>
+    <code menu="Refresh All Event" id="c2019031309042451">'In Workbook Activate Event Place This Code
+ThisWorkbook.RefreshAll</code>
+    <code menu="Copy Visible Values After Filter" id="c2019031309102666">[A1].SpecialCells(xlCellTypeVisible).Copy</code>
+    <code menu="Create Table" id="c2019031810182801"> 'CREATE TABLE WITH INPUTTED BOUNDRIES AND NAME IT DATATABLE
+    ActiveSheet.ListObjects.Add(xlSrcRange, Range(Cells(1, 1), Cells(LastRow, LastColumn)), , xlYes).Name = "DataTable"
+   
+    
+ Dim ws As Worksheet, tbl As ListObject, sortcolumn As Range
+ Dim DateNum As Long, Ordertype As String
+            Set ws = ActiveSheet
+            Set tbl = ws.ListObjects("DataTable")
+            Set sortcolumn = Range("DataTable[Order type]")</code>
+    <code menu="List All Pivot Tables " id="c2019031810445032">Sub ListPivotsInfor()
+'Update 20141112
+    Dim St As Worksheet
+    Dim NewSt As Worksheet
+    Dim pt As PivotTable
+    Dim I, K As Long
+    Application.ScreenUpdating = False
+    Set NewSt = Worksheets.Add
+    I = 1: K = 2
+    With NewSt
+        .Cells(I, 1) = "Name"
+        .Cells(I, 2) = "Source"
+        .Cells(I, 3) = "Refreshed by"
+        .Cells(I, 4) = "Refreshed"
+        .Cells(I, 5) = "Sheet"
+        .Cells(I, 6) = "Location"
+        For Each St In ActiveWorkbook.Worksheets
+            For Each pt In St.PivotTables
+                I = I + 1
+                .Cells(I, 1).Value = pt.Name
+                .Cells(I, 2).Value = pt.SourceData
+                .Cells(I, 3).Value = pt.RefreshName
+                .Cells(I, 4).Value = pt.RefreshDate
+                .Cells(I, 5).Value = St.Name
+                .Cells(I, 6).Value = pt.TableRange1.Address
+            Next
+        Next
+        .Activate
+    End With
+    Application.ScreenUpdating = True
+End Sub</code>
+  </folder>
+  <folder menu="06 - Navigation" id="2019031309122487">
+    <code menu="Determine Next Empty Row" id="c2019031309122898">Dim nextRow as long
+nextRow = application.worksheetfunction.countA([A:A])+1
+
+'or
+
+
+dim lastRow as long
+lastRow = cells(rows.count,1).end(xlup)
+
+'or
+
+
+Dim lastRow
+lastRow = ActiveSheet.UsedRange.SpecialCells(xlCellTypeLastCell).ROW</code>
+  </folder>
+  <folder menu="07 - Userforms" id="2019031309215869">
+    <code menu="Userform Info" id="c20190313092202410">me.Hide
+Unload.me
+userform1.show 'userform1 is the name of the form - subject to change 
+
+'==================================================================================================================
+
+'********************
+'    HIDE USERFORM
+'********************
+
+'in the code 
+
+me.Hide
+
+'Hide is the method and it will hide the entire form and all elements contained within it
+'"me" refers specifically to the useform or essentially a 'visible' module holding all the code and buttons 
+'the userform is just a container for all the buttons and features, me.hide will hide it all in one fell swoop
+
+'==================================================================================================================
+
+'********************
+'    UNLOAD USERFORM
+'********************
+
+'hide only hides the userform its still active, to get rid of it you need to use:
+
+unload.me
+
+'or the red "X" this will "unload" the userform
+
+'==================================================================================================================
+
+'***************
+'    TAB ORDER
+'***************
+
+'in properties window in userform the field "TabIndex" is the order of areas that will receive 
+'focus when you hit tab and cycle through them
+
+'==================================================================================================================
+
+'**************************************************
+'    DEFAULT VALUES IN TEXT BOXES ON INITIALIZE
+'**************************************************
+
+'when editing userform, to have a default entry in the text box or to have something such as
+'the country never change, just change the default value by entering text in the UF editor
+
+'==================================================================================================================
+
+'************************************
+'    COLUMN WIDTHS IN COMBO BOXES
+'************************************
+
+'when doing column widths in things like combo boxes to display results, using semi-colons 
+'will let you add multiple in line items of differing value
+
+'==================================================================================================================
+
+
+'************************************************************
+'    HIDE APPLICATION AND ONLY USERFORM IS VISIBLE
+'************************************************************
+
+'to hide XL application and only show userform do this
+'also have all closing or cancelling options show the application or a button to show application as a contingency 
+
+sub hideWB
+    application.visible = False
+    userform.show
+end sub
+
+'this way the form is visible and the application isnt. make sure to build it out so application shows again
+
+'application.visible = false also prevents adding data to a worksheet while 'false'. 
+'The only workaround I found was entering data into a closed file or unhiding the application prior to data entry briefly."
+</code>
+  </folder>
+  <folder menu="00 - VBA" id="20190313092635311">
+    <code menu="Classes Info" id="c20190313092651113">'=====================
+'VBA CLASS MODULES
+'=====================
+
+'https://youtu.be/MjbmsVDnAL0?list=PLNIs-AWhQzckr8Dgmgb3akx_gFMnpxTN5
+'-----------------------------------
+'What is a class
+'-----------------------------------
+'a blueprint of a objects, functions variables 
+'a way to hide a lot of complex code behind the scenes to reference in normal modules
+
+
+'-----------------------------------
+'why use class modules
+'-----------------------------------
+'allows you to develop your own blueprints about how objects should work and what other
+'users can do with them
+
+
+'-----------------------------------
+'designing and creating
+'-----------------------------------
+
+'Class Module ~ Film
+
+option explicit
+
+public title as string 'this populates the intelisense of the nromal module on the f. object instance
+public releasedate as date 'this populates the intelisense of the nromal module on the f. object instance
+public Lengthminutes as integer 'this populates the intelisense of the nromal module on the f. object instance
+
+private sub class_initialize()
+	worksheets("Sheet1").select
+end sub
+
+
+
+
+'Normal Module ~ TestFilmClass 
+	Sub UsingFilmClass()
+
+		Dim f as Film
+	
+		set f = New Film
+
+		f.title = "Test"
+		f.releasedate = "date"
+		f.lengthminutes = 121
+
+ 		f.addtolist
+
+		f.createwordreport
+
+		set f = nothing ' destroys the instance of the class
+		'variable is also destroyed when it goes out of scope
+		'variables go out of scope when the subroutine they're run in ends
+
+	End Sub
+
+
+
+'-----------------------------------
+'class events
+'-----------------------------------
+'activated much like worksheet events or workbook events 
+'dropdown -&gt; select Class
+'other dropdown select - &gt; Initialize/Terminate
+
+'when the code in the normal module creates a new instance of the class if you 
+'have the class initialize event going it will run all of the code in the initialize
+'sub before returning back to the normal module 
+
+'-----------------------------------
+'class fields
+'-----------------------------------
+'public and private variable with declared data types able to be referenced upon new instance 
+'of the class but if private it will not be accessable, and references must be set 
+'and if private, option will not appear in intellisense
+
+'-----------------------------------
+'defining properties
+'-----------------------------------
+'3 types of property statements "Let, Get, &amp; Set"
+
+
+
+'Let: allows you to pass a value into the property
+'Get: allows you to return values from the property
+'Set: when you want to pass in an object for your properties value
+
+public property Let Title(Value as String) 'what we want the property to be called
+	pTitle = Value 'read
+end property
+public property get title() as string
+	title = pTitle 'write ability
+end property
+
+'properties are useful because you can pass the variable into the property like the film
+'name and then a property can act as an independant subroutine and do things like
+'validate that a copy doesnt exist already in the your data set, change the case, font,
+'concatenate, etc.
+
+
+
+
+'-----------------------------------
+'creating methods 
+'-----------------------------------
+'basically a normal sub routine but when using the class instance f.AddToList
+'the method will appear valid and the instance of the class will then perform the action of 
+'the method subroutine
+
+
+public sub AddToList()
+
+	sheet1.select
+	range("A1").end(xldown).offset(1,0).select 'select last cell in a then get next blank
+	activecell.value=active.cell.offset(-1,0).value+1
+	activecell.offset(0,1).value = me.Title 'Me is the instance of the class
+	activecell.offset(0,2).value = me.ReleaseDate
+	activecell.offset(0,3).value = me.LengthMinutes
+	activecell.offset(0,4).value = me.GenreText
+End Sub
+</code>
+  </folder>
+  <folder menu="08 - Charts Code" id="20190313101428819">
+    <code menu="Generate Bar Chart" id="c20190313101433620">Sub MakeChart()
+ Dim myRange As Range
+ 
+Set myRange = Application.InputBox(Prompt:="Select chart inputs", Type:=8)
+   Charts.Add
+   ActiveChart.ChartType = xlColumnClustered
+   ActiveChart.SetSourceData Source:=myRange, PlotBy:=xlColumns
+ 
+   ActiveChart.Location Where:=xlLocationAsNewSheet
+ 
+End Sub</code>
+  </folder>
+</CustomCode>
