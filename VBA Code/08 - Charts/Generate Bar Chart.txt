@@ -1,0 +1,11 @@
+Sub MakeChart()
+ Dim myRange As Range
+ 
+Set myRange = Application.InputBox(Prompt:="Select chart inputs", Type:=8)
+   Charts.Add
+   ActiveChart.ChartType = xlColumnClustered
+   ActiveChart.SetSourceData Source:=myRange, PlotBy:=xlColumns
+ 
+   ActiveChart.Location Where:=xlLocationAsNewSheet
+ 
+End Sub

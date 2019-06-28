@@ -1,0 +1,1 @@
+ActiveWindow.DisplayWorkbookTabs = False
